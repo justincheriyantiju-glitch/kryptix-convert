@@ -127,13 +127,6 @@ cd kryptix-convert
 
 Then open `index.html` in your browser. No build step and no dependencies to install.
 
-### Deploy your own copy with GitHub Pages
-
-1. Fork this repository.
-2. Go to **Settings → Pages**.
-3. Under **Source**, choose **Deploy from a branch**, select `main` and `/ (root)`, then save.
-4. Your site goes live at `https://justincheriyantiju-glitch.github.io/kryptix-convert/`.
-
 ---
 
 ## 🧱 Tech Stack
