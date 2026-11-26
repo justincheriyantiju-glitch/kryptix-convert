@@ -13,7 +13,7 @@ No uploads. No accounts. No ads. No tracking. No storage.
 
 <br>
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_KRYPTIX-7c4dff?style=for-the-badge&logo=githubpages&logoColor=white)](https://justincheriyantiju-glitch.github.io/kryptix-convert/)
+[![Live](https://img.shields.io/badge/Live_Demo-Open_KRYPTIX-7c4dff?style=for-the-badge&logo=githubpages&logoColor=white)](https://justincheriyantiju-glitch.github.io/kryptix-convert/)
 [![No Backend](https://img.shields.io/badge/Backend-None-000000?style=for-the-badge&labelColor=7c4dff)](#-how-it-works)
 [![Pure HTML](https://img.shields.io/badge/Built_with-HTML%20%2B%20CSS%20%2B%20JS-1a1030?style=for-the-badge)](#-tech-stack)
 
