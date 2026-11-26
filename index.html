@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="KRYPTIX is a private file converter that runs entirely in your browser.">
+<title>KRYPTIX — File Converter</title>
+<style>
+:root{--panel:#0c0912;--panel-2:#150f21;--line:rgba(173,145,255,.14);--purple:#7c4dff;--p2:#9d78ff;--lav:#c9b6ff;--text:#f5f1ff;--muted:#8f85a8;--font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:#000;color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:-20% -10% auto;height:70vh;background:radial-gradient(ellipse at 50% 0,rgba(124,77,255,.28),transparent 65%);pointer-events:none}
+nav{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;height:52px;padding:0 max(22px,calc((100% - 980px)/2));background:rgba(0,0,0,.65);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;letter-spacing:.22em;font-size:15px}.logo i{color:var(--p2);font-style:normal}
+nav .l{display:flex;gap:26px}nav a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .25s}nav a:hover{color:var(--text)}
+main{position:relative}
+.hero{text-align:center;padding:90px 22px 48px}
+.pill{display:inline-block;font-size:12px;letter-spacing:.08em;color:var(--lav);padding:7px 14px;border:1px solid var(--line);border-radius:99px;background:rgba(124,77,255,.08);margin-bottom:26px}
+h1{font-size:clamp(44px,8.5vw,88px);font-weight:700;letter-spacing:-.045em;line-height:1.02}
+h1 span{background:linear-gradient(180deg,#d9ccff,#7c4dff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);font-size:clamp(17px,2.4vw,21px);line-height:1.5;max-width:580px;margin:22px auto 0}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 90px}
+.cats{display:flex;gap:4px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.cats button{flex:1;white-space:nowrap;padding:10px 14px;border:0;border-radius:10px;background:transparent;color:var(--muted);font:500 14px var(--font);cursor:pointer;transition:.25s}
+.cats button:hover{color:var(--text)}
+.cats button.on{background:var(--panel-2);color:var(--text);box-shadow:0 0 0 1px var(--line),0 4px 18px rgba(124,77,255,.25)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chips button{padding:8px 15px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--lav);font:13px var(--font);cursor:pointer;transition:.2s}
+.chips button:hover{background:rgba(124,77,255,.12)}
+.chips button.on{background:var(--purple);border-color:var(--purple);color:#fff}
+.card{background:linear-gradient(180deg,var(--panel),#07050b);border:1px solid var(--line);border-radius:28px;padding:34px;box-shadow:0 30px 80px rgba(80,40,180,.18);animation:in .4s ease}
+@keyframes in{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2{font-size:26px;font-weight:650;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:15px;margin:6px 0 24px;line-height:1.45}
+label{display:block;font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+textarea{width:100%;height:190px;resize:vertical;background:#050308;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;outline:none;margin-bottom:20px;transition:.2s}
+textarea:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(124,77,255,.2)}
+input[type=range]{width:100%;accent-color:var(--purple);margin:6px 0 24px}
+.drop{border:1.5px dashed rgba(173,145,255,.3);border-radius:20px;padding:34px 20px;text-align:center;cursor:pointer;transition:.25s;background:rgba(124,77,255,.04);margin-bottom:18px}
+.drop:hover,.drop.over{border-color:var(--p2);background:rgba(124,77,255,.12)}
+.drop b{display:block;font-size:17px;font-weight:600;margin-bottom:4px}.drop span{color:var(--muted);font-size:14px}
+.files{list-style:none;margin-bottom:20px;display:grid;gap:8px}
+.files li{display:flex;align-items:center;gap:12px;padding:8px 12px;background:#050308;border:1px solid var(--line);border-radius:14px;font-size:14px}
+.files img{width:40px;height:40px;object-fit:cover;border-radius:9px}
+.files .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.files .s{color:var(--muted);font-size:12px}
+.files button{width:28px;height:28px;border-radius:50%;border:0;background:var(--panel-2);color:var(--lav);cursor:pointer;font-size:15px}.files button:hover{background:var(--purple)}
+.go{width:100%;padding:16px;border:0;border-radius:99px;background:linear-gradient(180deg,#8f67ff,#6a3df0);color:#fff;font:600 16px var(--font);cursor:pointer;transition:.2s;box-shadow:0 8px 28px rgba(124,77,255,.4)}
+.go:hover{transform:translateY(-1px);box-shadow:0 12px 36px rgba(124,77,255,.55)}.go:active{transform:scale(.985)}.go:disabled{opacity:.5;cursor:default;transform:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sec{padding:13px;border-radius:99px;border:1px solid var(--line);background:var(--panel-2);color:var(--text);font:500 15px var(--font);cursor:pointer;transition:.2s}.sec:hover{border-color:var(--p2)}
+#outWrap{margin-top:24px}#outWrap textarea{margin-bottom:12px}
+.status{text-align:center;color:var(--lav);font-size:14px;min-height:20px;margin-top:16px}
+.note{text-align:center;color:var(--muted);font-size:13px;margin-top:16px}
+.feats{max-width:980px;margin:0 auto;padding:0 20px 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feat{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px}
+.feat h3{font-size:18px;font-weight:600;margin-bottom:8px}.feat p{color:var(--muted);font-size:14px;line-height:1.55}
+footer{position:relative;border-top:1px solid var(--line);padding:36px 20px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8}
+footer .logo{color:var(--text);margin-bottom:8px}
+@media(max-width:680px){.feats{grid-template-columns:1fr}.card{padding:24px;border-radius:24px}.hero{padding-top:60px}nav .l{gap:16px}}
+</style>
+</head>
+<body>
+<nav><div class="logo">KRYPTIX<i>.</i></div><div class="l"><a href="#convert">Convert</a><a href="#features">Features</a><a href="#about">About</a></div></nav>
+<main>
+<section class="hero">
+  <div class="pill">PRIVATE FILE CONVERSION</div>
+  <h1>Your files.<br><span>Your control.</span></h1>
+  <p>Convert documents, images, data and audio. Everything happens on your device — nothing is ever uploaded.</p>
+</section>
+<section class="wrap" id="convert">
+  <div class="cats" id="cats"></div>
+  <div class="chips" id="chips"></div>
+  <div class="card">
+    <h2 id="ttl"></h2><p class="sub" id="sub"></p>
+    <div id="inText"><label for="txt">Input</label><textarea id="txt" spellcheck="false"></textarea></div>
+    <div id="inFile">
+      <div class="drop" id="drop"><b>Drop files here</b><span>or click to choose</span></div>
+      <input type="file" id="fi" hidden><ul class="files" id="list"></ul>
+    </div>
+    <div id="qWrap"><label for="q">Quality <span id="qv">90</span>%</label><input type="range" id="q" min="30" max="100" value="90"></div>
+    <button class="go" id="go">Convert</button>
+    <div id="outWrap" hidden>
+      <label for="out">Result</label><textarea id="out" readonly spellcheck="false"></textarea>
+      <div class="row"><button class="sec" id="cp">Copy</button><button class="sec" id="dl">Download</button></div>
+    </div>
+    <div class="status" id="status"></div>
+    <div class="note">🔒 Processed entirely in your browser</div>
+  </div>
+</section>
+<section class="feats" id="features">
+  <div class="feat"><h3>Private by design</h3><p>Your files never leave your device. No uploads, no accounts, no tracking.</p></div>
+  <div class="feat"><h3>Fast &amp; simple</h3><p>Drop, convert, download. No queues, no limits, no unnecessary steps.</p></div>
+  <div class="feat"><h3>Works anywhere</h3><p>Runs in any modern browser on desktop and mobile.</p></div>
+</section>
+</main>
+<footer id="about"><div class="logo">KRYPTIX<i>.</i></div>Your files. Your privacy. Nothing more.<br>© 2026 KRYPTIX. All rights reserved.</footer>
+
+<script>
+const $=id=>document.getElementById(id), say=m=>$("status").textContent=m, sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const CDN="https://cdnjs.cloudflare.com/ajax/libs/";
+const LIBS={pdf:"jspdf/2.5.2/jspdf.umd.min.js",md:"marked/12.0.2/marked.min.js",yaml:"js-yaml/4.1.0/js-yaml.min.js",docx:"mammoth/1.6.0/mammoth.browser.min.js",xlsx:"xlsx/0.18.5/xlsx.full.min.js",pdfjs:"pdf.js/3.11.174/pdf.min.js",zip:"jszip/3.10.1/jszip.min.js",td:"turndown/7.1.2/turndown.min.js",heic:"heic2any/0.0.4/heic2any.min.js",mp3:"lamejs/1.2.1/lame.min.js"},got={};
+const load=k=>got[k]||(got[k]=new Promise((ok,no)=>{const s=document.createElement("script");s.src=CDN+LIBS[k];s.onload=ok;s.onerror=()=>{delete got[k];no(new Error("Couldn't load a required library. Check your connection."))};document.head.append(s)}));
+
+const base=f=>f.name.replace(/\.[^.]+$/,"");
+const loadImg=f=>new Promise((ok,no)=>{const i=new Image(),u=URL.createObjectURL(f);i.onload=()=>{URL.revokeObjectURL(u);ok(i)};i.onerror=()=>no(new Error("Couldn't read "+f.name));i.src=u});
+const canvas=(i,bg)=>{const c=document.createElement("canvas");c.width=i.naturalWidth;c.height=i.naturalHeight;const x=c.getContext("2d");if(bg){x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height)}x.drawImage(i,0,0);return c};
+const b64=u=>{let s="";for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode(...u.subarray(i,i+8192));return btoa(s)};
+const T=(name,text)=>({name,text});
+const sheet=t=>{const w=XLSX.read(t,{type:"string"});return w.Sheets[w.SheetNames[0]]};
+const book=s=>{const w=XLSX.utils.book_new();XLSX.utils.book_append_sheet(w,s,"Sheet1");return new Blob([XLSX.write(w,{type:"array",bookType:"xlsx"})],{type:"application/octet-stream"})};
+const firstSheet=async f=>{const w=XLSX.read(await f.arrayBuffer());return w.Sheets[w.SheetNames[0]]};
+const x2j=n=>{const o={};for(const a of n.attributes||[])o["@"+a.name]=a.value;let t="";for(const c of n.childNodes){if(c.nodeType===1){const v=x2j(c);o[c.nodeName]=c.nodeName in o?[].concat(o[c.nodeName],v):v}else if(c.nodeType===3||c.nodeType===4)t+=c.nodeValue}t=t.trim();if(!Object.keys(o).length)return t;if(t)o["#text"]=t;return o};
+const esc=s=>String(s).replace(/[<>&"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
+const j2x=(k,v)=>Array.isArray(v)?v.map(i=>j2x(k,i)).join(""):v&&typeof v==="object"?`<${k}>${Object.entries(v).map(([a,b])=>j2x(a,b)).join("")}</${k}>`:`<${k}>${esc(v)}</${k}>`;
+const imgTo=(ext,mime)=>({g:"Images",n:"Image → "+ext.toUpperCase(),d:"Convert PNG, JPG, WebP, GIF or BMP images to "+ext.toUpperCase()+". Batch supported.",in:"file",acc:"image/*",multi:1,q:mime!=="image/png",
+  run:async(fs,o)=>{const out=[];for(const f of fs){const c=canvas(await loadImg(f),mime==="image/jpeg"),b=await new Promise(r=>c.toBlob(r,mime,o.q));if(!b||b.type!==mime)throw new Error("Your browser can't export "+ext.toUpperCase()+".");out.push({name:base(f)+"."+ext,blob:b})}return out}});
+const txt=(g,n,d,fn,out,lib,ph)=>({g,n,d,in:"text",lib,ph,run:async t=>T("converted."+out,await fn(t))});
+const fil=(g,n,d,acc,fn,out,lib)=>({g,n,d,in:"file",acc,lib,run:async fs=>T(base(fs[0])+"."+out,await fn(fs[0]))});
+
+const pdfOpen=async f=>{await load("pdfjs");const L=pdfjsLib;if(!L.GlobalWorkerOptions.workerSrc){const t=await(await fetch(CDN+"pdf.js/3.11.174/pdf.worker.min.js")).text();L.GlobalWorkerOptions.workerSrc=URL.createObjectURL(new Blob([t],{type:"text/javascript"}))}return L.getDocument({data:await f.arrayBuffer()}).promise};
+const pdfImg=(ext,mime)=>({g:"Documents",n:"PDF → "+ext.toUpperCase(),d:"Render every PDF page as a "+ext.toUpperCase()+" image.",in:"file",acc:".pdf",lib:"pdfjs",run:async([f])=>{const d=await pdfOpen(f),out=[];for(let i=1;i<=d.numPages;i++){const pg=await d.getPage(i),vp=pg.getViewport({scale:2}),c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);await pg.render({canvasContext:x,viewport:vp}).promise;out.push({name:base(f)+"-"+i+"."+ext,blob:await new Promise(r=>c.toBlob(r,mime,.92))})}return out}});
+const xconv=(n,acc,bt)=>({g:"Data",n,d:"Convert between spreadsheet formats.",in:"file",acc,lib:"xlsx",run:async([f])=>({name:base(f)+"."+(bt==="biff8"?"xls":bt),blob:new Blob([XLSX.write(XLSX.read(await f.arrayBuffer()),{type:"array",bookType:bt})])})});
+const heic=(ext,mime)=>({g:"Images",n:"HEIC → "+ext.toUpperCase(),d:"Convert iPhone HEIC photos to "+ext.toUpperCase()+".",in:"file",acc:".heic,.heif",multi:1,lib:"heic",q:1,run:async(fs,o)=>{const out=[];for(const f of fs)out.push({name:base(f)+"."+ext,blob:[].concat(await heic2any({blob:f,toType:mime,quality:o.q}))[0]});return out}});
+const zipOf=async f=>JSZip.loadAsync(await f.arrayBuffer());
+const dec=s=>{const t=document.createElement("textarea");t.innerHTML=s;return t.value};
+const strip=s=>dec(s.replace(/<(style|script)[\s\S]*?<\/\1>/g,"").replace(/<\/(p|div|h\d|li|tr|text:p|text:h|a:p)>/g,"\n").replace(/<[^>]+>/g,"").replace(/\n\s*\n\s*\n+/g,"\n\n")).trim();
+const zipText=async(f,re,sort)=>{const z=await zipOf(f),k=Object.keys(z.files).filter(n=>re.test(n));if(sort)k.sort((a,b)=>a.match(/\d+/)-b.match(/\d+/));let o="";for(const n of k)o+=strip(await z.files[n].async("string"))+"\n\n";return o.trim()};
+const stream=(f,C2)=>new Response(f.stream().pipeThrough(new C2("gzip"))).blob();
+const obj2stl=t=>{const v=[];let o="solid obj\n";for(const l of t.split("\n")){const p=l.trim().split(/\s+/);if(p[0]==="v")v.push(p.slice(1,4).map(Number));else if(p[0]==="f"){const i=p.slice(1).map(s=>{const n=parseInt(s);return v[n<0?v.length+n:n-1]});for(let k=1;k<i.length-1;k++)o+=" facet normal 0 0 0\n  outer loop\n"+[i[0],i[k],i[k+1]].map(q=>"   vertex "+q.join(" ")+"\n").join("")+"  endloop\n endfacet\n"}}return o+"endsolid obj\n"};
+const stl2obj=t=>{const v=[...t.matchAll(/vertex\s+(\S+)\s+(\S+)\s+(\S+)/g)];if(!v.length)throw new Error("No ASCII STL data found. Binary STL isn't supported.");return v.map(m=>`v ${m[1]} ${m[2]} ${m[3]}`).join("\n")+"\n"+v.filter((_,i)=>i%3==0).map((_,i)=>`f ${i*3+1} ${i*3+2} ${i*3+3}`).join("\n")+"\n"};
+const CT='<?xml version="1.0" encoding="UTF-8"?>';
+const docx=async t=>{const z=new JSZip();z.file("[Content_Types].xml",CT+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');z.file("_rels/.rels",CT+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');z.file("word/document.xml",CT+'<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+t.split("\n").map(l=>`<w:p><w:r><w:t xml:space="preserve">${esc(l)}</w:t></w:r></w:p>`).join("")+"</w:body></w:document>");return{name:"document.docx",blob:await z.generateAsync({type:"blob"})}};
+const mp3=async([f])=>{const ac=new(window.AudioContext||webkitAudioContext)(),b=await ac.decodeAudioData(await f.arrayBuffer());ac.close();const I=x=>Int16Array.from(x,s=>Math.max(-1,Math.min(1,s))*32767),st=b.numberOfChannels>1,e=new lamejs.Mp3Encoder(st?2:1,b.sampleRate,128),L=I(b.getChannelData(0)),R=st?I(b.getChannelData(1)):null,o=[];for(let i=0;i<L.length;i+=1152)o.push(st?e.encodeBuffer(L.subarray(i,i+1152),R.subarray(i,i+1152)):e.encodeBuffer(L.subarray(i,i+1152)));o.push(e.flush());return{name:base(f)+".mp3",blob:new Blob(o,{type:"audio/mpeg"})}};
+const C=[
+{g:"Documents",n:"Text → PDF",d:"Turn any text into a clean PDF document.",in:"text",lib:"pdf",run:async t=>{const p=new jspdf.jsPDF({unit:"mm",format:"a4"});p.setFontSize(12);let y=20;p.splitTextToSize(t,170).forEach(l=>{if(y>277){p.addPage();y=20}p.text(l,20,y);y+=6});return{name:"document.pdf",blob:p.output("blob")}}},
+{g:"Documents",n:"Images → PDF",d:"Combine images into one PDF, one per page.",in:"file",acc:"image/*",multi:1,lib:"pdf",run:async fs=>{let p;for(const f of fs){const c=canvas(await loadImg(f),1),L=c.width>c.height,W=L?297:210,H=L?210:297,r=Math.min((W-20)/c.width,(H-20)/c.height),w=c.width*r,h=c.height*r;p?p.addPage("a4",L?"l":"p"):p=new jspdf.jsPDF({unit:"mm",format:"a4",orientation:L?"l":"p"});p.addImage(c.toDataURL("image/jpeg",.92),"JPEG",(W-w)/2,(H-h)/2,w,h)}return{name:"images.pdf",blob:p.output("blob")}}},
+fil("Documents","Word → HTML","Convert a .docx file to clean HTML.",".docx",async f=>(await mammoth.convertToHtml({arrayBuffer:await f.arrayBuffer()})).value,"html","docx"),
+fil("Documents","Word → Text","Extract the plain text from a .docx file.",".docx",async f=>(await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value,"txt","docx"),
+txt("Documents","Markdown → HTML","Render Markdown as HTML.",t=>marked.parse(t),"html","md","# Hello\n\nWrite **Markdown** here…"),
+txt("Documents","HTML → Text","Strip the tags and keep the text.",t=>new DOMParser().parseFromString(t,"text/html").body.textContent.trim(),"txt",0,"<p>Paste HTML here…</p>"),
+imgTo("png","image/png"),imgTo("jpg","image/jpeg"),imgTo("webp","image/webp"),
+txt("Data","CSV → JSON","Turn CSV rows into a JSON array.",t=>JSON.stringify(XLSX.utils.sheet_to_json(sheet(t)),null,2),"json","xlsx","name,age\nAda,36"),
+txt("Data","JSON → CSV","Flatten a JSON array into CSV.",t=>XLSX.utils.sheet_to_csv(XLSX.utils.json_to_sheet([].concat(JSON.parse(t)))),"csv","xlsx",'[{"name":"Ada","age":36}]'),
+txt("Data","JSON → YAML","Convert JSON to YAML.",t=>jsyaml.dump(JSON.parse(t)),"yaml","yaml",'{"name":"Ada"}'),
+txt("Data","YAML → JSON","Convert YAML to JSON.",t=>JSON.stringify(jsyaml.load(t),null,2),"json","yaml","name: Ada"),
+txt("Data","XML → JSON","Convert XML to JSON.",t=>{const d=new DOMParser().parseFromString(t,"application/xml");if(d.querySelector("parsererror"))throw new Error("That isn't valid XML.");return JSON.stringify({[d.documentElement.nodeName]:x2j(d.documentElement)},null,2)},"json",0,"<person><name>Ada</name></person>"),
+txt("Data","JSON → XML","Convert JSON to XML.",t=>{const j=JSON.parse(t),k=Object.keys(j);return '<?xml version="1.0" encoding="UTF-8"?>\n'+(k.length===1&&!Array.isArray(j)?j2x(k[0],j[k[0]]):j2x("root",j))},"xml",0,'{"person":{"name":"Ada"}}'),
+{g:"Data",n:"CSV → Excel",d:"Create an .xlsx spreadsheet from CSV.",in:"text",lib:"xlsx",ph:"name,age\nAda,36",run:async t=>({name:"converted.xlsx",blob:book(sheet(t))})},
+{g:"Data",n:"JSON → Excel",d:"Create an .xlsx spreadsheet from a JSON array.",in:"text",lib:"xlsx",ph:'[{"name":"Ada","age":36}]',run:async t=>({name:"converted.xlsx",blob:book(XLSX.utils.json_to_sheet([].concat(JSON.parse(t))))})},
+fil("Data","Excel → CSV","Export the first sheet of an .xlsx/.xls file as CSV.",".xlsx,.xls,.csv",async f=>XLSX.utils.sheet_to_csv(await firstSheet(f)),"csv","xlsx"),
+fil("Data","Excel → JSON","Export the first sheet of an .xlsx/.xls file as JSON.",".xlsx,.xls,.csv",async f=>JSON.stringify(XLSX.utils.sheet_to_json(await firstSheet(f)),null,2),"json","xlsx"),
+{g:"Audio",n:"Audio / Video → WAV",d:"Decode MP3, M4A, OGG, FLAC or a video's audio track to uncompressed WAV.",in:"file",acc:"audio/*,video/*",run:async([f])=>{const ac=new(window.AudioContext||webkitAudioContext)(),b=await ac.decodeAudioData(await f.arrayBuffer());ac.close();const ch=b.numberOfChannels,n=b.length,buf=new ArrayBuffer(44+n*ch*2),v=new DataView(buf),w=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));w(0,"RIFF");v.setUint32(4,36+n*ch*2,1);w(8,"WAVEfmt ");v.setUint32(16,16,1);v.setUint16(20,1,1);v.setUint16(22,ch,1);v.setUint32(24,b.sampleRate,1);v.setUint32(28,b.sampleRate*ch*2,1);v.setUint16(32,ch*2,1);v.setUint16(34,16,1);w(36,"data");v.setUint32(40,n*ch*2,1);const d=[...Array(ch)].map((_,i)=>b.getChannelData(i));let o=44;for(let i=0;i<n;i++)for(let c=0;c<ch;c++){const s=Math.max(-1,Math.min(1,d[c][i]));v.setInt16(o,s<0?s*32768:s*32767,1);o+=2}return{name:base(f)+".wav",blob:new Blob([buf],{type:"audio/wav"})}}},
+txt("Encoding","Text → Base64","Encode text as Base64.",t=>b64(new TextEncoder().encode(t)),"txt"),
+txt("Encoding","Base64 → Text","Decode Base64 back to text.",t=>new TextDecoder().decode(Uint8Array.from(atob(t.trim()),c=>c.charCodeAt(0))),"txt"),
+fil("Encoding","File → Base64","Encode any file as Base64.","",async f=>b64(new Uint8Array(await f.arrayBuffer())),"txt"),
+txt("Encoding","URL Encode","Percent-encode text for use in URLs.",t=>encodeURIComponent(t),"txt"),
+txt("Encoding","URL Decode","Decode percent-encoded text.",t=>decodeURIComponent(t),"txt"),
+{g:"Documents",n:"Text → Word",d:"Create a .docx Word document from text.",in:"text",lib:"zip",run:docx},
+txt("Documents","Text → RTF","Create Rich Text from plain text.",t=>"{\\rtf1\\ansi\\deff0 "+t.replace(/[\\{}]/g,"\\$&").replace(/[^\x00-\x7f]/g,c=>"\\u"+c.charCodeAt(0)+"?").replace(/\n/g,"\\par\n")+"}","rtf"),
+txt("Documents","RTF → Text","Basic plain-text extraction from RTF.",t=>t.replace(/\{\\(fonttbl|colortbl|stylesheet|info)[\s\S]*?\}\s*\}/g,"").replace(/\\par[d]?/g,"\n").replace(/\\'([0-9a-f]{2})/gi,(m,h)=>String.fromCharCode(parseInt(h,16))).replace(/\\u(-?\d+)\??/g,(m,n)=>String.fromCharCode(n<0?+n+65536:+n)).replace(/\\[a-z]+-?\d* ?/gi,"").replace(/[{}]/g,"").trim(),"txt"),
+pdfImg("png","image/png"),pdfImg("jpg","image/jpeg"),
+fil("Documents","PDF → Text","Extract the text from a PDF.",".pdf",async f=>{const d=await pdfOpen(f);let s="";for(let i=1;i<=d.numPages;i++)s+=(await(await d.getPage(i)).getTextContent()).items.map(x=>x.str).join(" ")+"\n\n";return s.trim()},"txt","pdfjs"),
+fil("Documents","Word → Markdown","Convert a .docx file to Markdown.",".docx",async f=>new TurndownService({headingStyle:"atx"}).turndown((await mammoth.convertToHtml({arrayBuffer:await f.arrayBuffer()})).value),"md",["docx","td"]),
+txt("Documents","HTML → Markdown","Convert HTML to Markdown.",t=>new TurndownService({headingStyle:"atx"}).turndown(t),"md","td","<h1>Hello</h1><p>Paste HTML here…</p>"),
+fil("Documents","OpenDocument → Text","Extract the text from an .odt file.",".odt",f=>zipText(f,/^content\.xml$/),"txt","zip"),
+fil("Documents","PowerPoint → Text","Extract the text from every slide of a .pptx.",".pptx",f=>zipText(f,/^ppt\/slides\/slide\d+\.xml$/,1),"txt","zip"),
+fil("Documents","eBook (EPUB) → Text","Extract the text from an .epub book.",".epub",f=>zipText(f,/\.x?html?$/i),"txt","zip"),
+xconv("Excel → ODS",".xlsx,.xls,.csv","ods"),xconv("ODS → Excel",".ods","xlsx"),xconv("XLS → XLSX",".xls","xlsx"),xconv("XLSX → XLS",".xlsx","biff8"),
+heic("jpg","image/jpeg"),heic("png","image/png"),
+{g:"Audio",n:"Audio → MP3",d:"Encode any audio file to 128 kbps MP3.",in:"file",acc:"audio/*,video/*",lib:"mp3",run:mp3},
+{g:"Archives",n:"Files → ZIP",d:"Pack one or more files into a ZIP archive.",in:"file",multi:1,lib:"zip",run:async fs=>{const z=new JSZip();fs.forEach(f=>z.file(f.name,f));return{name:"archive.zip",blob:await z.generateAsync({type:"blob",compression:"DEFLATE"})}}},
+{g:"Archives",n:"ZIP → Files",d:"Extract every file from a ZIP archive.",in:"file",acc:".zip",lib:"zip",run:async([f])=>{const z=await zipOf(f),o=[];for(const n in z.files)if(!z.files[n].dir)o.push({name:n.split("/").pop(),blob:await z.files[n].async("blob")});if(!o.length)throw new Error("That archive is empty.");return o}},
+{g:"Archives",n:"File → GZ",d:"Compress a file with gzip.",in:"file",run:async([f])=>({name:f.name+".gz",blob:await stream(f,CompressionStream)})},
+{g:"Archives",n:"GZ → File",d:"Decompress a .gz file.",in:"file",acc:".gz",run:async([f])=>({name:f.name.replace(/\.gz$/i,"")||"file",blob:await stream(f,DecompressionStream)})},
+fil("3D","OBJ → STL","Convert a Wavefront .obj model to ASCII STL for 3D printing.",".obj",async f=>obj2stl(await f.text()),"stl"),
+fil("3D","STL → OBJ","Convert an ASCII .stl model to Wavefront OBJ.",".stl",async f=>stl2obj(await f.text()),"obj")
+];
+
+let cur,files=[],res=[],grp;
+const groups=[...new Set(C.map(c=>c.g))];
+const mk=(txt,on,fn)=>{const b=document.createElement("button");b.textContent=txt;b.className=on?"on":"";b.onclick=fn;return b};
+const kb=b=>b>1048576?(b/1048576).toFixed(1)+" MB":Math.ceil(b/1024)+" KB";
+function draw(){
+  $("cats").replaceChildren(...groups.map(g=>mk(g,g===grp,()=>{grp=g;pick(C.find(c=>c.g===g))})));
+  $("chips").replaceChildren(...C.filter(c=>c.g===grp).map(c=>mk(c.n,c===cur,()=>pick(c))));
+}
+function pick(c){
+  cur=c;grp=c.g;files=[];$("ttl").textContent=c.n;$("sub").textContent=c.d;
+  $("inText").hidden=c.in!=="text";$("inFile").hidden=c.in!=="file";$("qWrap").hidden=!c.q;$("outWrap").hidden=true;
+  $("fi").accept=c.acc||"";$("fi").multiple=!!c.multi;$("txt").placeholder=c.ph||"Paste or type here…";say("");list();draw();
+}
+function list(){
+  $("list").replaceChildren(...files.map((f,i)=>{
+    const li=document.createElement("li");
+    if(f.type.startsWith("image/")){const im=new Image();im.src=URL.createObjectURL(f);li.append(im)}
+    const n=document.createElement("span");n.className="n";n.textContent=f.name;
+    const s=document.createElement("span");s.className="s";s.textContent=kb(f.size);
+    const x=document.createElement("button");x.textContent="×";x.setAttribute("aria-label","Remove");x.onclick=()=>{files.splice(i,1);list()};
+    li.append(n,s,x);return li}));
+}
+const add=l=>{files=cur.multi?files.concat([...l]):[...l].slice(0,1);list();say("")};
+$("drop").onclick=()=>$("fi").click();
+$("fi").onchange=e=>{add(e.target.files);e.target.value=""};
+["dragenter","dragover"].forEach(e=>$("drop").addEventListener(e,v=>{v.preventDefault();$("drop").classList.add("over")}));
+["dragleave","drop"].forEach(e=>$("drop").addEventListener(e,v=>{v.preventDefault();$("drop").classList.remove("over")}));
+$("drop").addEventListener("drop",v=>add(v.dataTransfer.files));
+$("q").oninput=e=>$("qv").textContent=e.target.value;
+
+function save(x){const a=document.createElement("a");a.href=URL.createObjectURL(x.blob||new Blob([x.text],{type:"text/plain"}));a.download=x.name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+$("dl").onclick=()=>save(res[0]);
+$("cp").onclick=()=>navigator.clipboard.writeText($("out").value).then(()=>say("Copied to clipboard."),()=>say("Couldn't copy. Select the text and copy it manually."));
+$("go").onclick=async()=>{
+  if(cur.in==="text"&&!$("txt").value.trim())return say("Please enter something first.");
+  if(cur.in==="file"&&!files.length)return say("Add a file first.");
+  $("go").disabled=true;$("outWrap").hidden=true;say("Converting…");
+  try{
+    await Promise.all([].concat(cur.lib||[]).map(load));
+    res=[].concat(await cur.run(cur.in==="text"?$("txt").value:files,{q:$("q").value/100}));
+    if(res.length===1&&res[0].text!==undefined){$("out").value=res[0].text;$("outWrap").hidden=false;say("Done.")}
+    else{for(const x of res){save(x);await sleep(250)}say("Done. Your file"+(res.length>1?"s are":" is")+" downloaded.")}
+  }catch(e){console.error(e);say(e.message||"Something went wrong. Please try again.")}
+  $("go").disabled=false;
+};
+pick(C[0]);
+</script>
+</body>
+</html>
