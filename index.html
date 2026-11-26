@@ -101,11 +101,11 @@ footer .logo{color:var(--text);margin-bottom:8px}
 <script>
 const $=id=>document.getElementById(id), say=m=>$("status").textContent=m, sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const CDN="https://cdnjs.cloudflare.com/ajax/libs/";
-const LIBS={pdf:"jspdf/2.5.2/jspdf.umd.min.js",md:"marked/12.0.2/marked.min.js",yaml:"js-yaml/4.1.0/js-yaml.min.js",docx:"mammoth/1.6.0/mammoth.browser.min.js",xlsx:"xlsx/0.18.5/xlsx.full.min.js",pdfjs:"pdf.js/3.11.174/pdf.min.js",zip:"jszip/3.10.1/jszip.min.js",td:"turndown/7.1.2/turndown.min.js",heic:"heic2any/0.0.4/heic2any.min.js",mp3:"lamejs/1.2.1/lame.min.js"},got={};
+const LIBS={pdf:"jspdf/2.5.1/jspdf.umd.min.js",md:"marked/12.0.2/marked.min.js",yaml:"js-yaml/4.1.0/js-yaml.min.js",docx:"mammoth/1.6.0/mammoth.browser.min.js",xlsx:"xlsx/0.18.5/xlsx.full.min.js",pdfjs:"pdf.js/3.11.174/pdf.min.js",zip:"jszip/3.10.1/jszip.min.js",td:"turndown/7.1.2/turndown.min.js",heic:"heic2any/0.0.4/heic2any.min.js",mp3:"lamejs/1.2.1/lame.min.js"},got={};
 const load=k=>got[k]||(got[k]=new Promise((ok,no)=>{const s=document.createElement("script");s.src=CDN+LIBS[k];s.onload=ok;s.onerror=()=>{delete got[k];no(new Error("Couldn't load a required library. Check your connection."))};document.head.append(s)}));
 
 const base=f=>f.name.replace(/\.[^.]+$/,"");
-const loadImg=f=>new Promise((ok,no)=>{const i=new Image(),u=URL.createObjectURL(f);i.onload=()=>{URL.revokeObjectURL(u);ok(i)};i.onerror=()=>no(new Error("Couldn't read "+f.name));i.src=u});
+const loadImg=f=>new Promise((ok,no)=>{const i=new Image(),u=URL.createObjectURL(f);i.onload=()=>{URL.revokeObjectURL(u);i.naturalWidth&&i.naturalHeight?ok(i):no(new Error(f.name+" has no intrinsic size. If it's an SVG, give it width and height attributes."))};i.onerror=()=>no(new Error("Couldn't read "+f.name));i.src=u});
 const canvas=(i,bg)=>{const c=document.createElement("canvas");c.width=i.naturalWidth;c.height=i.naturalHeight;const x=c.getContext("2d");if(bg){x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height)}x.drawImage(i,0,0);return c};
 const b64=u=>{let s="";for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode(...u.subarray(i,i+8192));return btoa(s)};
 const T=(name,text)=>({name,text});
